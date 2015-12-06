@@ -11,8 +11,8 @@ public class Bat {
 //	private static final int Y = 0;
 //	private static final int WIDTH = 20;
 //	private static final int HEIGHT = 5;
-	public static int standartBatWidth = 80;
-	public static int standartBatHeight = 14;
+	public static int standartBatWidth = 160;//100;
+	public static int standartBatHeight = 23;//14;
 	private Rectangle hitBox;//= new Rectangle(0, 0, 20, 5);
 	
 	public Bat(int x, int y, int width, int height){
