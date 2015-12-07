@@ -13,6 +13,7 @@ public class Game extends JPanel {
 	private Dimension gameField = new Dimension(800, 500);
 	private static Bat bat;
 	private static Ball ball;
+	private static boolean isRunning;
 	
 	public Game(Frame container){
 		container.addKeyListener(new KeyCatch());
