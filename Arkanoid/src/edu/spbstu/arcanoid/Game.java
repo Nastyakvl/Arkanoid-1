@@ -1,6 +1,8 @@
 package edu.spbstu.arcanoid;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JPanel;
 
@@ -12,12 +14,17 @@ public class Game extends JPanel {
 	private static Bat bat;
 	private static Ball ball;
 	
-	public Game(){
-		bat = new Bat((gameField.width - Bat.standartBatWidth)/2, (gameField.height - Bat.standartBatHeight), 
+	public Game(Frame container){
+		container.addKeyListener(new KeyCatch());
+		bat = new Bat(this,(gameField.width - Bat.standartBatWidth)/2, (gameField.height - Bat.standartBatHeight), 
 				Bat.standartBatWidth, Bat.standartBatHeight);
-		ball=new Ball((gameField.width-ball.standartRadius)/2, (gameField.height - Bat.standartBatHeight-ball.standartRadius*2),ball.standartRadius);
+		ball=new Ball(this,(gameField.width-ball.standartRadius*2)/2, (gameField.height - Bat.standartBatHeight-ball.standartRadius*2),ball.standartRadius);
 		
 		
+	}
+	
+	public Dimension getGameDimension(){
+		return gameField;
 	}
 	
 	public void setBat(Bat bat){
@@ -46,5 +53,22 @@ public class Game extends JPanel {
 		bat.render(g);
 		g.setColor(Color.BLACK );
 		ball.render(g);
+	}
+	
+	
+	private class KeyCatch extends KeyAdapter{
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if (e.getKeyCode()== KeyEvent.VK_RIGHT){
+				bat.moveOnX(10);
+				ball.moveOnX(10);
+			}
+			if (e.getKeyCode()==KeyEvent.VK_LEFT){
+				bat.moveOnX(-10);
+				ball.moveOnX(-10);
+			}
+			repaint();
+		}
+		
 	}
 }
