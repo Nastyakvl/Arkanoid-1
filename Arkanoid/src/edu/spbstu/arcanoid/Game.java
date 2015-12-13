@@ -68,16 +68,17 @@ public class Game extends JPanel {
 		Ball tempBall = new Ball(this, (gameField.width - Ball.standartRadius * 2) / 2,
 				(gameField.height - Bat.standartBatHeight - Ball.standartRadius * 2), Ball.standartRadius);
 		this.setBall(tempBall);
-
+		repaint();
+	
 	}
 
 	private Thread gameThread = new Thread(new Runnable() {
 		public void run() {
 			isRunning = true;
-			while (isRunning) {
-				if (!isPaused) {
+			while (!isPaused) {
+				repaint();
+				if (isRunning) {
 					ball.moveOnXY();
-					repaint();
 					try {
 						Thread.sleep(4);
 					} catch (Exception e) {
@@ -117,13 +118,15 @@ public class Game extends JPanel {
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 					start();
 				}
-				repaint();
+				
 			} else {
 				if (e.getKeyCode() == KeyEvent.VK_RIGHT)
 					bat.moveOnX(10);
 				if (e.getKeyCode() == KeyEvent.VK_LEFT)
 					bat.moveOnX(-10);
+				
 			}
+			repaint();
 
 		}
 	}

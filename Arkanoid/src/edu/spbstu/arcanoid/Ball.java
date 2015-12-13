@@ -57,6 +57,10 @@ public class Ball {
 		if (isCollideOY()) {
 			movement.y = -movement.y;
 		}
+		if (isCollideSideHitBox()){
+			movement.x = -movement.x;
+			movement.y = -movement.y;
+		}
 
 		pos.x += movement.x;
 		pos.y += movement.y;
@@ -70,7 +74,7 @@ public class Ball {
 	}
 
 	public boolean isCollideOY() {
-		if (((pos.y + 1.999 * radius) >= instance.getBat().getHitBox().y)
+		if (((pos.y + 1.999*radius) >= instance.getBat().getHitBox().y)
 				&& ((pos.x >= instance.getBat().getHitBox().x)
 						&& (pos.x <= (instance.getBat().getHitBox().width + instance.getBat().getHitBox().x)))
 				|| pos.y <= 0) {
@@ -81,7 +85,13 @@ public class Ball {
 		}
 		return false;
 	}
-
-
+	public boolean isCollideSideHitBox(){
+		if ((pos.y + 2*radius > instance.getBat().getHitBox().y) && 
+				(pos.y <= (instance.getBat().getHitBox().y + instance.getBat().getHitBox().height)) &&
+				((pos.x == instance.getBat().getHitBox().x) || (pos.x == (instance.getBat().getHitBox().x + instance.getBat().getHitBox().width)))){
+			return true;
+		}
+		return false;
+	}
 
 }
