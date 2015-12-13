@@ -39,6 +39,9 @@ public class Bat {
 		
 	}
 	
+	public boolean collidesWith(Rectangle obj){
+		return hitBox.intersects(obj);
+	}
 	
 	
 //	public void paintComponent (Graphics g){

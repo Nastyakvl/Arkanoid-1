@@ -15,7 +15,7 @@ public class Main {
 		//frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
-		game = new Game(frame);
+		game = new Game(frame,8,3);
 		game.setSize(frame.getSize());
 		frame.add(game);
 		

@@ -12,11 +12,21 @@ public class Game extends JPanel {
 	private Dimension gameField = new Dimension(800, 500);
 	private static Bat bat;
 	private static Ball ball;
+	private Platform[][] platforms;
 	private static boolean isRunning = false;
 	private static boolean isPaused = false;
 
-	public Game(Frame container) {
+	public Game(Frame container, int platformOnX, int platformOnY) {
 		container.addKeyListener(new KeyCatch());
+
+		platforms = new Platform[platformOnX][platformOnY];
+		for (int x = 0; x != platforms.length; x++)
+			for (int y = 0; y != platforms[0].length; y++) {
+				int pWidth = (gameField.width) / platforms.length;
+				int pHeight = (gameField.height / 3) / platforms[0].length;
+				platforms[x][y] = new Platform(x * pWidth + 5, y * pHeight + 3, pWidth - 10, pHeight - 25);
+			}
+
 		bat = new Bat(this, (gameField.width - Bat.standartBatWidth) / 2, (gameField.height - Bat.standartBatHeight),
 				Bat.standartBatWidth, Bat.standartBatHeight);
 		ball = new Ball(this, (gameField.width - Ball.standartRadius * 2) / 2,
@@ -38,6 +48,10 @@ public class Game extends JPanel {
 
 	public void setBall(Ball ball) {
 		Game.ball = ball;
+	}
+
+	public Platform[][] getPlatforms() {
+		return this.platforms;
 	}
 
 	public void setSize(Dimension size) {
@@ -69,24 +83,24 @@ public class Game extends JPanel {
 				(gameField.height - Bat.standartBatHeight - Ball.standartRadius * 2), Ball.standartRadius);
 		this.setBall(tempBall);
 		repaint();
-	
+
 	}
 
 	private Thread gameThread = new Thread(new Runnable() {
 		public void run() {
 			isRunning = true;
-			while (!isPaused) {
+			while (isRunning) {
 				repaint();
-				if (isRunning) {
+				if (!isPaused) {
 					ball.moveOnXY();
 					try {
 						Thread.sleep(4);
-					} catch (Exception e) {
+							} catch (Exception e) {
+							}
+						}
 					}
-				}
-			}
-		}
-	});
+				
+			};
 
 	public void paint(Graphics g) {
 		super.paint(g);
@@ -101,6 +115,14 @@ public class Game extends JPanel {
 		bat.render(g);
 		g.setColor(Color.BLACK);
 		ball.render(g);
+
+		for (Platform[] pls : platforms) {
+			for (Platform p : pls) {
+				g.setColor(new Color(71, 84, 175));
+				p.render(g);
+			}
+		}
+
 	}
 
 	private class KeyCatch extends KeyAdapter {
@@ -118,14 +140,16 @@ public class Game extends JPanel {
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 					start();
 				}
-				
+
 			} else {
 				if (e.getKeyCode() == KeyEvent.VK_RIGHT)
 					bat.moveOnX(10);
 				if (e.getKeyCode() == KeyEvent.VK_LEFT)
 					bat.moveOnX(-10);
-				
+
 			}
+			repaint();
+
 			repaint();
 
 		}
