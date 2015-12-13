@@ -1,8 +1,10 @@
 package edu.spbstu.arcanoid;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 public class Ball {
 	public static int standartRadius = 12;
@@ -54,7 +56,7 @@ public class Ball {
 		if (isCollideOX()) {
 			movement.x = -movement.x;
 		}
-		if (isCollideOY()) {
+		if (isCollideOY() || isCollideBlock()) {
 			movement.y = -movement.y;
 		}
 
@@ -70,16 +72,30 @@ public class Ball {
 	}
 
 	public boolean isCollideOY() {
-		if (((pos.y + 1.999 * radius) >= instance.getBat().getHitBox().y)
-				&& ((pos.x >= instance.getBat().getHitBox().x)
-						&& (pos.x <= (instance.getBat().getHitBox().width + instance.getBat().getHitBox().x)))
-				|| pos.y <= 0) {
+//		if (((pos.y + 1.999 * radius) >= instance.getBat().getHitBox().y)
+//				&& ((pos.x > instance.getBat().getHitBox().x)
+//						&& (pos.x <= (instance.getBat().getHitBox().width + instance.getBat().getHitBox().x)))
+//				|| pos.y <= 0) 
+		if(instance.getBat().collidesWith(new Rectangle(pos.x, 
+				pos.y,radius*2, radius*2)) || pos.y <= 0){
 			return true;
 		}
 		if (pos.y + 2*radius > instance.getGameDimension().height) {
 			instance.loseBall();
 		}
 		return false;
+	}
+	
+	public boolean isCollideBlock(){
+	for (Platform[] pls: instance.getPlatforms()){
+		for (Platform p: pls){
+			if (p.collidesWith(new Rectangle(pos.x, pos.y,radius*2, radius*2))){
+				p.destroy();
+				return true;
+			}		
+		}
+	}
+	return false;
 	}
 
 
