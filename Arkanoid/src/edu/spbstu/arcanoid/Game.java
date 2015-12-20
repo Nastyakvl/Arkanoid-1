@@ -13,17 +13,20 @@ public class Game extends JPanel {
 	private static Bat bat;
 	private static Ball ball;
 	private Platform[][] platforms;
-	private static boolean isRunning = false;
-	private static boolean isPaused = false;
-
+	private boolean isRunning = false;
+	private boolean isPaused = false;
+	public boolean won=false; 
+	private boolean lost=false;
+	private int ballCount;
+	
 	public Game(Frame container, int platformOnX, int platformOnY) {
 		container.addKeyListener(new KeyCatch());
 	
 		platforms= new Platform[platformOnX][platformOnY];
 		for (int x=0; x!=platforms.length; x++)
 			for (int y=0; y!=platforms[0].length; y++){
-				int pWidth=(gameField.width)/platforms.length;
-				int pHeight=(gameField.height/3)/platforms[0].length;
+				int pWidth=(gameField.width)/platformOnX;
+				int pHeight=(gameField.height/3)/platformOnY;
 				platforms[x][y]=new Platform(x*pWidth+5, y*pHeight+3,pWidth-10,pHeight-25);
 			}
 		
@@ -32,6 +35,7 @@ public class Game extends JPanel {
 		ball = new Ball(this, (gameField.width - Ball.standartRadius * 2) / 2,
 				(gameField.height - Bat.standartBatHeight - Ball.standartRadius * 2), Ball.standartRadius);
 
+		ballCount=3;
 	}
 
 	public Dimension getGameDimension() {
@@ -76,6 +80,8 @@ public class Game extends JPanel {
 
 	public void loseBall() {
 		pause();
+		ballCount--;
+		if (ballCount<=0)lost=true;
 		Bat tempBat = new Bat(this, (gameField.width - Bat.standartBatWidth) / 2,
 				(gameField.height - Bat.standartBatHeight), Bat.standartBatWidth, Bat.standartBatHeight);
 		this.setBat(tempBat);
@@ -122,6 +128,18 @@ public class Game extends JPanel {
 				p.render(g);
 			}
 		}
+		
+		if (won){
+			g.setFont(new Font("Arial",Font.BOLD, 30));
+			g.drawString("You won!", gameField.width/2-40, gameField.height/2);
+			stop();
+		}
+		if (lost){
+			g.setFont(new Font("Arial",Font.BOLD, 30));
+			g.drawString("You lost!", gameField.width/2-40, gameField.height/2);
+			stop();
+		}
+		
 			
 	}
 
@@ -150,5 +168,9 @@ public class Game extends JPanel {
 				
 			}
 		}
+	}
+
+	public void playerWon() {
+		won=true;
 	}
 }

@@ -59,9 +59,18 @@ public class Ball {
 		if (isCollideOY() || isCollideBlock()) {
 			movement.y = -movement.y;
 		}
+		
+		boolean won=true;
+		for (Platform[] pls: instance.getPlatforms()){
+			for (Platform p2: pls){
+				if (!p2.isDestroy()) won=false;
+			}
+					
+			}if (won) instance.playerWon();
 
 		pos.x += movement.x;
 		pos.y += movement.y;
+		
 	}
 
 	public boolean isCollideOX() {

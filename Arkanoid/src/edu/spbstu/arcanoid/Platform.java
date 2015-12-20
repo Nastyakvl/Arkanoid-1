@@ -17,6 +17,11 @@ public class Platform {
 		return (isDestroyed)? false: Box.intersects(obj);
 	}
 	
+	public boolean isDestroy(){
+		return isDestroyed;
+	}
+	
+	
 	public void render(Graphics g) {
 		if (!isDestroyed){
 		g.fillRect(Box.x,Box.y, Box.width, Box.height );
