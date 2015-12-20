@@ -3,6 +3,9 @@ package edu.spbstu.arcanoid;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.PrintWriter;
+
 
 import javax.swing.JPanel;
 
@@ -87,6 +90,14 @@ public class Game extends JPanel {
 		ballCount--;
 		if (ballCount <= 0) {
 			lost = true;
+			try (PrintWriter outFile = new PrintWriter(new File("text.txt"))) {
+				outFile.print(score);
+				outFile.close();
+			}
+			catch(Exception e){
+			}
+
+			
 		}
 		Bat tempBat = new Bat(this, (gameField.width - Bat.standartBatWidth) / 2,
 				(gameField.height - Bat.standartBatHeight), Bat.standartBatWidth, Bat.standartBatHeight);
@@ -120,7 +131,7 @@ public class Game extends JPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 
-		g.translate((getWidth() - gameField.width) / 2, (getHeight() - gameField.height) / 2);
+		g.translate((getWidth() - gameField.width - sideBar.width) / 2, (getHeight() - gameField.height) / 2);
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, gameField.width, gameField.height);
 		g.setColor(Color.BLACK);
@@ -162,31 +173,38 @@ public class Game extends JPanel {
 	private class KeyCatch extends KeyAdapter {
 		@Override
 		public void keyPressed(KeyEvent e) {
-			if (!isRunning || isPaused) {
-				if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-					bat.moveOnX(10);
-					ball.moveOnX(10);
+			if (!(won || lost)) {
+				if (!isRunning || isPaused) {
+					if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+						bat.moveOnX(10);
+						ball.moveOnX(10);
+					}
+					if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+						bat.moveOnX(-10);
+						ball.moveOnX(-10);
+					}
+					if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+						start();
+					}
+					repaint();
+				} else {
+					if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+						bat.moveOnX(40);
+					if (e.getKeyCode() == KeyEvent.VK_LEFT)
+						bat.moveOnX(-40);
+					repaint();
 				}
-				if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-					bat.moveOnX(-10);
-					ball.moveOnX(-10);
-				}
-				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-					start();
-				}
-				repaint();
-			} else {
-				if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-					bat.moveOnX(40);
-				if (e.getKeyCode() == KeyEvent.VK_LEFT)
-					bat.moveOnX(-40);
-				repaint();
-
 			}
 		}
 	}
 
 	public void playerWon() {
+		try (PrintWriter outFile = new PrintWriter(new File("text.txt"))) {
+			outFile.print(score);
+			outFile.close();
+		}
+		catch(Exception e){
+		}
 		won = true;
 	}
 }

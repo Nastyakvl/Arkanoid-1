@@ -40,7 +40,15 @@ public class Ball {
 		if (isCollideOX()) {
 			movement.x = -movement.x;
 		}
-		if (isCollideOY() || isCollideBlock()) {
+		if (isCollideOY()) {
+			movement.y = -movement.y;
+		}
+		Bat b = instance.getBat();
+//		if (((pos.x + 2 * radius) >= b.getX())) {
+//			movement.y = -movement.y;
+//			movement.x = -movement.x;
+//		}
+		if (isCollideBlock()) {
 			movement.y = -movement.y;
 		}
 
@@ -52,29 +60,21 @@ public class Ball {
 			}
 
 		}
-		if (won)
+		if (won){
 			instance.playerWon();
+		}
 		pos.x += movement.x;
 		pos.y += movement.y;
 	}
 
 	public boolean isCollideOX() {
-		Bat b = instance.getBat();
 		if (pos.x + 2 * radius >= (instance.getGameDimension().width) || pos.x <= 0) {
 			return true;
-			// }else if (((pos.x + 2*radius) >= b.getX()) && (pos.x <= (b.getX()
-			// + Bat.standartBatWidth))){
-			// return true;
 		}
 		return false;
 	}
 
 	public boolean isCollideOY() {
-		// if (((pos.y + 1.999 * radius) >= instance.getBat().getHitBox().y)
-		// && ((pos.x > instance.getBat().getHitBox().x)
-		// && (pos.x <= (instance.getBat().getHitBox().width +
-		// instance.getBat().getHitBox().x)))
-		// || pos.y <= 0)
 		if (instance.getBat().collidesWith(new Rectangle(pos.x, pos.y, radius * 2, radius * 2)) || pos.y <= 0) {
 			return true;
 		}

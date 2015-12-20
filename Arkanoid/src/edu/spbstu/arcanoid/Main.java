@@ -12,16 +12,11 @@ public class Main {
 		
 		frame = new JFrame("Arkanoid");
 		frame.setSize(1000,700);
-		//frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
+
 		game = new Game(frame,8,3);
 		game.setSize(frame.getSize());
 		frame.add(game);
-		
-//		bat = new Bat();
-//		frame.add(bat);
-//		frame.repaint();
 		
 		frame.setVisible(true);
 	}

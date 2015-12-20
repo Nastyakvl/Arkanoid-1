@@ -1,9 +1,7 @@
 package edu.spbstu.arcanoid; 
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.event.KeyAdapter;
 
-import javax.swing.JPanel;
 
 
 public class Bat {
@@ -50,23 +48,5 @@ public class Bat {
 	public int getY(){
 		return hitBox.y;
 	}
-	
-	
-//	public void paintComponent (Graphics g){
-//		//g.create(X, Y, WIDTH, HEIGHT);
-//		g.setColor(Color.BLUE);
-//		g.fillRect(X, Y, WIDTH, HEIGHT);
-//	}
-	
-//	public void draw () {
-//		Graphics g = c.getGraphics();
-//		paint(g);
-//	}
-
-//	private Graphics create(int x2, int y2, int width2, int height2) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
 	
 }
