@@ -9,28 +9,33 @@ public class Platform {
 	private Rectangle Box;
 	private int value = 0;
 
-	public Platform(int x, int y, int width, int height) {
+	public Platform(int value, int x, int y, int width, int height) {
 		Box = new Rectangle(x, y, width, height);
-		this.value = 100;
+		this.value = value;
 
 	}
 
-	public boolean collidesWith(Rectangle obj) {
-		return (isDestroyed) ? false : Box.intersects(obj);
-	}
-
-	public void render(Graphics g) {
-		if (!isDestroyed) {
-			g.fillRect(Box.x, Box.y, Box.width, Box.height);
-			g.setColor(Color.BLACK);
-			g.drawRect(Box.x, Box.y, Box.width, Box.height);
-		}
-	}
-
-	public void destroy() {
-		isDestroyed = true;
+	public boolean collidesWith(Rectangle obj){
+		return (isDestroyed)? false: Box.intersects(obj);
 	}
 	
+	public boolean isDestroy(){
+		return isDestroyed;
+	}
+	
+	
+	public void render(Graphics g) {
+		if (!isDestroyed){
+		g.fillRect(Box.x,Box.y, Box.width, Box.height );
+		g.setColor(Color.BLACK);
+		g.drawRect(Box.x,Box.y, Box.width, Box.height );
+	}
+}
+
+
+	public void destroy() {
+				isDestroyed=true;
+	}
 	public int getValue(){
 		return this.value;
 	}

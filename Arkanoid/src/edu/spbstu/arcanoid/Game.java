@@ -9,30 +9,35 @@ import javax.swing.JPanel;
 public class Game extends JPanel {
 
 	private static final long serialVersionUID = 377834890210055936L;
-	private Dimension sideBar = new Dimension (100, 500);
+	private Dimension sideBar = new Dimension(100, 500);
 	private Dimension gameField = new Dimension(800, 500);
 	private static Bat bat;
 	private static Ball ball;
 	private Platform[][] platforms;
 	private int score = 0;
-	private static boolean isRunning = false;
-	private static boolean isPaused = false;
+	private boolean isRunning = false;
+	private boolean isPaused = false;
+	public boolean won = false;
+	private boolean lost = false;
+	private int ballCount;
 
 	public Game(Frame container, int platformOnX, int platformOnY) {
 		container.addKeyListener(new KeyCatch());
-	
-		platforms= new Platform[platformOnX][platformOnY];
-		for (int x=0; x!=platforms.length; x++)
-			for (int y=0; y!=platforms[0].length; y++){
-				int pWidth=(gameField.width)/platforms.length;
-				int pHeight=(gameField.height/3)/platforms[0].length;
-				platforms[x][y]=new Platform(x*pWidth+5, y*pHeight+3,pWidth-10,pHeight-25);
+
+		platforms = new Platform[platformOnX][platformOnY];
+		for (int x = 0; x != platforms.length; x++)
+			for (int y = 0; y != platforms[0].length; y++) {
+				int pWidth = (gameField.width) / platforms.length;
+				int pHeight = (gameField.height / 3) / platforms[0].length;
+				platforms[x][y] = new Platform((3 - y) * 100, x * pWidth + 5, y * pHeight + 3, pWidth - 10,
+						pHeight - 25);
 			}
-		
+
 		bat = new Bat(this, (gameField.width - Bat.standartBatWidth) / 2, (gameField.height - Bat.standartBatHeight),
 				Bat.standartBatWidth, Bat.standartBatHeight);
 		ball = new Ball(this, (gameField.width - Ball.standartRadius * 2) / 2,
 				(gameField.height - Bat.standartBatHeight - Ball.standartRadius * 2), Ball.standartRadius);
+		ballCount = 3;
 		score = 0;
 
 	}
@@ -52,8 +57,8 @@ public class Game extends JPanel {
 	public void setBall(Ball ball) {
 		Game.ball = ball;
 	}
-	
-	public Platform[][] getPlatforms(){
+
+	public Platform[][] getPlatforms() {
 		return this.platforms;
 	}
 
@@ -79,6 +84,10 @@ public class Game extends JPanel {
 
 	public void loseBall() {
 		pause();
+		ballCount--;
+		if (ballCount <= 0) {
+			lost = true;
+		}
 		Bat tempBat = new Bat(this, (gameField.width - Bat.standartBatWidth) / 2,
 				(gameField.height - Bat.standartBatHeight), Bat.standartBatWidth, Bat.standartBatHeight);
 		this.setBat(tempBat);
@@ -87,10 +96,9 @@ public class Game extends JPanel {
 		this.setBall(tempBall);
 
 	}
-	
-	public void addScore(int score){
-	
-			this.score += score;
+
+	public void addScore(int score) {
+		this.score += score;
 	}
 
 	private Thread gameThread = new Thread(new Runnable() {
@@ -122,26 +130,33 @@ public class Game extends JPanel {
 		bat.render(g);
 		g.setColor(Color.BLACK);
 		ball.render(g);
-		
-		
-		for (Platform[] pls: platforms){
-			for (Platform p: pls){
-				g.setColor(new Color(71,84,175));
+
+		for (Platform[] pls : platforms) {
+			for (Platform p : pls) {
+				g.setColor(new Color(71, 84, 175));
 				p.render(g);
 			}
 		}
-		
-		//g.translate((getWidth() + gameField.width) / 2, (getHeight() + gameField.height) / 2);
+
+		g.setFont(new Font("Arial", Font.BOLD, 15));
+		g.setColor(Color.BLACK);
+		if (won) {
+			g.drawString("You won!", gameField.width / 2 - 40, gameField.height / 2);
+			stop();
+		}
+		if (lost) {
+			g.drawString("You lost!", gameField.width / 2 - 40, gameField.height / 2);
+			stop();
+		}
+
 		g.setColor(Color.YELLOW);
 		g.fillRect(gameField.width, 0, sideBar.width, sideBar.height);
 		g.setColor(Color.BLACK);
 		g.drawRect(gameField.width, 0, sideBar.width, sideBar.height);
-		
-		g.setFont(new Font("Arial",Font.BOLD, 15));
-		
-		g.drawString("Score: "+score, gameField.width + 15, 20);
-		g.drawString("Lives ", gameField.width + 15, 60);
-			
+
+		g.drawString("Score: " + score, gameField.width + 15, 20);
+		g.drawString("Lives: " + ballCount, gameField.width + 15, 60);
+
 	}
 
 	private class KeyCatch extends KeyAdapter {
@@ -166,8 +181,12 @@ public class Game extends JPanel {
 				if (e.getKeyCode() == KeyEvent.VK_LEFT)
 					bat.moveOnX(-40);
 				repaint();
-				
+
 			}
 		}
+	}
+
+	public void playerWon() {
+		won = true;
 	}
 }
