@@ -43,6 +43,14 @@ public class Bat {
 		return hitBox.intersects(obj);
 	}
 	
+	public int getX(){
+		return hitBox.x;
+	}
+	
+	public int getY(){
+		return hitBox.y;
+	}
+	
 	
 //	public void paintComponent (Graphics g){
 //		//g.create(X, Y, WIDTH, HEIGHT);

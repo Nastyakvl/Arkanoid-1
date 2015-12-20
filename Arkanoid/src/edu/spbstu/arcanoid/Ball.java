@@ -39,28 +39,10 @@ public class Ball {
 
 	public void moveOnXY() {
 
-		// if (pos.x >= instance.getGameDimension().width - 2 * radius) {
-		// movement.x=-movement.x;
-		// }
-		//
-		// if (pos.x <= 0) {
-		// movement.x=-movement.x;
-		// }
-		//
-		// if (pos.y >= instance.getGameDimension().height - radius) {
-		// movement.y=-movement.y;
-		// }
-		// if (pos.y <= 0) {
-		// movement.y=-movement.y;
-		// }
 		if (isCollideOX()) {
 			movement.x = -movement.x;
 		}
 		if (isCollideOY() || isCollideBlock()) {
-			movement.y = -movement.y;
-		}
-		if (isCollideSideHitBox()){
-			movement.x = -movement.x;
 			movement.y = -movement.y;
 		}
 
@@ -69,26 +51,22 @@ public class Ball {
 	}
 
 	public boolean isCollideOX() {
+		Bat b = instance.getBat();
 		if (pos.x + 2 * radius >= (instance.getGameDimension().width) || pos.x <= 0) {
 			return true;
-		}
+//		}else if (((pos.x + 2*radius) >= b.getX()) && (pos.x  <= (b.getX() + Bat.standartBatWidth))){
+//			return true;
+	}
 		return false;
 	}
 
 	public boolean isCollideOY() {
-<<<<<<< HEAD
-		if (((pos.y + 1.999*radius) >= instance.getBat().getHitBox().y)
-				&& ((pos.x >= instance.getBat().getHitBox().x)
-						&& (pos.x <= (instance.getBat().getHitBox().width + instance.getBat().getHitBox().x)))
-				|| pos.y <= 0) {
-=======
 //		if (((pos.y + 1.999 * radius) >= instance.getBat().getHitBox().y)
 //				&& ((pos.x > instance.getBat().getHitBox().x)
 //						&& (pos.x <= (instance.getBat().getHitBox().width + instance.getBat().getHitBox().x)))
 //				|| pos.y <= 0) 
 		if(instance.getBat().collidesWith(new Rectangle(pos.x, 
 				pos.y,radius*2, radius*2)) || pos.y <= 0){
->>>>>>> origin/master
 			return true;
 		}
 		if (pos.y + 2*radius > instance.getGameDimension().height) {
@@ -96,22 +74,13 @@ public class Ball {
 		}
 		return false;
 	}
-<<<<<<< HEAD
-	public boolean isCollideSideHitBox(){
-		if ((pos.y + 2*radius > instance.getBat().getHitBox().y) && 
-				(pos.y <= (instance.getBat().getHitBox().y + instance.getBat().getHitBox().height)) &&
-				((pos.x == instance.getBat().getHitBox().x) || (pos.x == (instance.getBat().getHitBox().x + instance.getBat().getHitBox().width)))){
-			return true;
-		}
-		return false;
-	}
-=======
 	
 	public boolean isCollideBlock(){
 	for (Platform[] pls: instance.getPlatforms()){
 		for (Platform p: pls){
 			if (p.collidesWith(new Rectangle(pos.x, pos.y,radius*2, radius*2))){
 				p.destroy();
+				instance.addScore(p.getValue());
 				return true;
 			}		
 		}
@@ -120,6 +89,5 @@ public class Ball {
 	}
 
 
->>>>>>> origin/master
 
 }
