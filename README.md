@@ -1,2 +1,2 @@
 # Arkanoid
-Coding arkanoid on Java.
+Game arkanoid on Java.
